@@ -4,10 +4,19 @@ export type JobStatus = "pending" | "processing" | "completed" | "failed";
 export interface Job {
   id: string;
   pipelineId: string;
+  deliveryId?: string;
+
+  jobType: PipelineAction;
+
   status: JobStatus;
-  payload: unknown;
+
+  priority: number;
+
+  payload?: unknown;
   result?: unknown;
+
   createdAt: Date;
+  lockedAt?: Date;
 }
 
 //Pipeline Types
@@ -40,7 +49,7 @@ export interface DeliveryRecord {
   id: string;
   driverId: string;
   status: DeliveryStatus;
-  eta?: number;
+  eta?: Date;
 }
 
 //Event Types
@@ -48,4 +57,4 @@ export type DeliveryEventType =
   | "status_changed"
   | "delay_detected"
   | "feedback_received"
-  | "alert_triggered";
+  | "delivery_canceled";

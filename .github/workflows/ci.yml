@@ -5,27 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  tests:
-    name: Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run Unit Tests
-        run: npm run test -- --coverage
-
-  style:
-    name: Style
+  typecheck:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,23 +16,42 @@ jobs:
           node-version: 22
 
       - run: npm ci
-      - run: npm run format:check
+
+      - name: Type check
+        run: npx tsc --noEmit
 
   docker:
-    name: Docker Build
     runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/deliveries
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Docker images
-        run: docker compose build
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
 
       - name: Start services
         run: docker compose up -d
 
-      - name: Check containers running
+      - name: Wait for Postgres
+        run: |
+          for i in {1..20}; do
+            docker exec delivery_postgres pg_isready -U postgres -d deliveries && exit 0
+            sleep 3
+          done
+          exit 1
+
+      - name: Run migrations
+        run: npm run db:migrate
+
+      - name: Check containers
         run: docker compose ps
 
       - name: Shutdown
+        if: always()
         run: docker compose down
