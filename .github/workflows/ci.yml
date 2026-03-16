@@ -20,11 +20,14 @@ jobs:
       - name: Type check
         run: npx tsc --noEmit
 
-      - name: Run Unit Tests
-        run: npm run test -- --coverage
+      - name: Run Tests
+        run: npm run test
 
   docker:
     runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/deliveries
 
     steps:
       - uses: actions/checkout@v4
