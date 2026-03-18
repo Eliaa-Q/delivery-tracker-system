@@ -2,8 +2,9 @@ import { db } from "../db";
 import { jobs } from "../schema/jobs";
 import { eq, desc, and, isNull } from "drizzle-orm";
 
-export async function createJob(data: any) {
-  return db.insert(jobs).values(data);
+export async function createJob(data: typeof jobs.$inferInsert) {
+  const result = await db.insert(jobs).values(data).returning();
+  return result[0];
 }
 export async function getNextJob() {
   const result = await db
@@ -35,4 +36,13 @@ export async function completeJob(id: string, result: any) {
       result,
     })
     .where(eq(jobs.id, id));
+}
+export async function getAllJobs() {
+  return db.select().from(jobs).orderBy(desc(jobs.createdAt));
+}
+
+export async function getJobById(id: string) {
+  const result = await db.select().from(jobs).where(eq(jobs.id, id)).limit(1);
+
+  return result[0];
 }

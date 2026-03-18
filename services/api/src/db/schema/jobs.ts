@@ -28,6 +28,14 @@ export const jobs = pgTable("jobs", {
 
   result: jsonb("result"),
 
+  attemptCount: integer("attempt_count").notNull().default(0),
+
+  maxAttempts: integer("max_attempts").notNull().default(3),
+
+  errorMessage: text("error_message"),
+
+  lastAttemptAt: timestamp("last_attempt_at", { withTimezone: true }),
+
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 
   lockedAt: timestamp("locked_at", { withTimezone: true }),

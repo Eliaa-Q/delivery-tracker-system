@@ -1,24 +1,21 @@
 //Job Types
 export type JobStatus = "pending" | "processing" | "completed" | "failed";
-
 export interface Job {
   id: string;
   pipelineId: string;
-  deliveryId?: string;
-
+  deliveryId?: string | null;
   jobType: PipelineAction;
-
   status: JobStatus;
-
   priority: number;
-
   payload?: unknown;
   result?: unknown;
-
+  attemptCount: number;
+  maxAttempts: number;
+  errorMessage?: string | null;
+  lastAttemptAt?: Date | null;
   createdAt: Date;
-  lockedAt?: Date;
+  lockedAt?: Date | null;
 }
-
 //Pipeline Types
 export type PipelineAction =
   | "updateDeliveryStatus"
@@ -34,8 +31,8 @@ export interface Pipeline {
   sourcePath: string;
   actionType: PipelineAction;
   actionConfig: Record<string, unknown> | null;
+  createdAt?: Date;
 }
-
 //Delivery Types
 export type DeliveryStatus =
   | "assigned"
@@ -48,9 +45,9 @@ export type DeliveryStatus =
 
 export interface DeliveryRecord {
   id: string;
-  driverId: string;
+  driverId?: string | null;
   status: DeliveryStatus;
-  eta?: Date;
+  eta?: Date | null;
 }
 
 //Event Types
@@ -59,3 +56,37 @@ export type DeliveryEventType =
   | "delay_detected"
   | "feedback_received"
   | "delivery_canceled";
+
+// Error Types
+export type AppErrorCode =
+  | "PIPELINE_NOT_FOUND"
+  | "JOB_NOT_FOUND"
+  | "INVALID_PAYLOAD"
+  | "DATABASE_ERROR"
+  | "JOB_LOCKED"
+  | "JOB_PROCESSING_FAILED"
+  | "UNKNOWN_ERROR";
+
+export interface AppErrorShape {
+  code: AppErrorCode;
+  message: string;
+  details?: unknown;
+}
+
+export class AppError extends Error {
+  code: AppErrorCode;
+  details?: unknown;
+  statusCode: number;
+
+  constructor(
+    code: AppErrorCode,
+    message: string,
+    statusCode = 500,
+    details?: unknown,
+  ) {
+    super(message);
+    this.code = code;
+    this.statusCode = statusCode;
+    this.details = details;
+  }
+}
