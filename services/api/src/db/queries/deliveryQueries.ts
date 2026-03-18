@@ -1,11 +1,35 @@
+import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { deliveries } from "../schema/deliveries";
-import { eq } from "drizzle-orm";
 
-export async function getDelivery(id: string) {
-  return db.select().from(deliveries).where(eq(deliveries.id, id));
+export async function getDeliveryById(id: string) {
+  const result = await db
+    .select()
+    .from(deliveries)
+    .where(eq(deliveries.id, id))
+    .limit(1);
+
+  return result[0];
 }
 
-export async function updateDeliveryStatus(id: string, status: string) {
-  return db.update(deliveries).set({ status }).where(eq(deliveries.id, id));
+export async function createDelivery(data: typeof deliveries.$inferInsert) {
+  const result = await db.insert(deliveries).values(data).returning();
+  return result[0];
+}
+
+export async function updateDeliveryById(
+  id: string,
+  data: Partial<typeof deliveries.$inferInsert>,
+) {
+  const result = await db
+    .update(deliveries)
+    .set(data)
+    .where(eq(deliveries.id, id))
+    .returning();
+
+  return result[0];
+}
+
+export async function getAllDeliveries() {
+  return db.select().from(deliveries);
 }

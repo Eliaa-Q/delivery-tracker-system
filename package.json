@@ -8,6 +8,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "dev": "ts-node-dev services/api/src/server.ts",
+    "worker": "ts-node-dev worker/src/worker.ts",
     "test:coverage": "vitest run --coverage"
   },
   "keywords": [],
