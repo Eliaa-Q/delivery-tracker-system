@@ -31,8 +31,9 @@ export type PipelineAction =
 export interface Pipeline {
   id: string;
   name: string;
+  sourcePath: string;
   actionType: PipelineAction;
-  actionConfig: Record<string, unknown>;
+  actionConfig: Record<string, unknown> | null;
 }
 
 //Delivery Types
