@@ -1,13 +1,30 @@
-import { pgTable, uuid, text, jsonb, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  uuid,
+  text,
+  jsonb,
+  timestamp,
+  uniqueIndex,
+} from "drizzle-orm/pg-core";
 
-export const pipelines = pgTable("pipelines", {
-  id: uuid("id").primaryKey().defaultRandom(),
+export const pipelines = pgTable(
+  "pipelines",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
 
-  name: text("name").notNull(),
+    name: text("name").notNull(),
 
-  actionType: text("action_type").notNull(),
+    sourcePath: text("source_path").notNull(),
 
-  actionConfig: jsonb("action_config"),
+    actionType: text("action_type").notNull(),
 
-  createdAt: timestamp("created_at").defaultNow(),
-});
+    actionConfig: jsonb("action_config"),
+
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  },
+  (table) => ({
+    sourcePathIdx: uniqueIndex("pipelines_source_path_idx").on(
+      table.sourcePath,
+    ),
+  }),
+);

@@ -8,6 +8,13 @@
       "when": 1773662138532,
       "tag": "0000_public_komodo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1773820778456,
+      "tag": "0001_quick_wallow",
+      "breakpoints": true
     }
   ]
 }
