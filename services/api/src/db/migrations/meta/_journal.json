@@ -15,6 +15,13 @@
       "when": 1773820778456,
       "tag": "0001_quick_wallow",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1773823882819,
+      "tag": "0002_panoramic_thunderball",
+      "breakpoints": true
     }
   ]
 }
