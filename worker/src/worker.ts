@@ -13,7 +13,7 @@ async function startWorker() {
       const result = await processNextJob();
 
       if (result) {
-        console.log("Worker processed job:", result);
+        console.log("Worker result:", result);
       }
     } catch (error) {
       console.error("Worker loop error:", error);

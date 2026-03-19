@@ -1,4 +1,4 @@
-import { AppError, Job } from "../../types";
+import { ActionResult, AppError, Job } from "../../types";
 import { delayAlertChain } from "../../services/api/src/actions/delayAlertChain";
 import { detectDelay } from "../../services/api/src/actions/detectDelay";
 import { driverDelaySpikeChain } from "../../services/api/src/actions/driverDelaySpikeChain";
@@ -6,7 +6,7 @@ import { driverPerformanceMetrics } from "../../services/api/src/actions/driverP
 import { feedbackIntegration } from "../../services/api/src/actions/feedbackIntegration";
 import { updateDeliveryStatus } from "../../services/api/src/actions/updateDeliveryStatus";
 
-export async function runAction(job: Job) {
+export async function runAction(job: Job): Promise<ActionResult> {
   switch (job.jobType) {
     case "updateDeliveryStatus":
       return updateDeliveryStatus(job);

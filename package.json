@@ -9,7 +9,8 @@
     "db:studio": "drizzle-kit studio",
     "dev": "ts-node-dev services/api/src/server.ts",
     "worker": "ts-node-dev worker/src/worker.ts",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "seed": "ts-node-dev services/api/src/db/seed.ts"
   },
   "keywords": [],
   "author": "",

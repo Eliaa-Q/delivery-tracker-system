@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, integer, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, real, timestamp } from "drizzle-orm/pg-core";
 import { drivers } from "./drivers";
 
 export const analytics = pgTable("analytics", {
@@ -8,7 +8,7 @@ export const analytics = pgTable("analytics", {
 
   metric: text("metric").notNull(),
 
-  value: integer("value"),
+  value: real("value"),
 
   createdAt: timestamp("created_at").defaultNow(),
 });

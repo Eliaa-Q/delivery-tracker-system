@@ -1,0 +1,1 @@
+ALTER TABLE "analytics" ALTER COLUMN "value" SET DATA TYPE real;

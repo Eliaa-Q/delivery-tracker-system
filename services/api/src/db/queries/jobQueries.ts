@@ -49,6 +49,7 @@ export async function completeJob(id: string, resultData: unknown) {
       status: "completed",
       result: resultData,
       lockedAt: null,
+      errorMessage: null,
     })
     .where(eq(jobs.id, id))
     .returning();

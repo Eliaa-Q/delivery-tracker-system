@@ -12,6 +12,10 @@ export async function getDeliveryById(id: string) {
   return result[0];
 }
 
+export async function getAllDeliveries() {
+  return db.select().from(deliveries);
+}
+
 export async function createDelivery(data: typeof deliveries.$inferInsert) {
   const result = await db.insert(deliveries).values(data).returning();
   return result[0];
@@ -28,8 +32,4 @@ export async function updateDeliveryById(
     .returning();
 
   return result[0];
-}
-
-export async function getAllDeliveries() {
-  return db.select().from(deliveries);
 }
