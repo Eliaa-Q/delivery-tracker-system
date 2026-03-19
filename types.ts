@@ -57,6 +57,22 @@ export type DeliveryEventType =
   | "feedback_received"
   | "delivery_canceled";
 
+//Action Types
+export type ChainedJobRequest = {
+  jobType: PipelineAction;
+  priority: number;
+  payload: Record<string, unknown>;
+  deliveryId?: string | null;
+  maxAttempts?: number;
+};
+
+export type ActionResult = {
+  action: PipelineAction;
+  success?: boolean;
+  nextJob?: ChainedJobRequest;
+  [key: string]: unknown;
+};
+
 // Error Types
 export type AppErrorCode =
   | "PIPELINE_NOT_FOUND"

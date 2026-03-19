@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
+import deliveriesRoutes from "./routes/deliveries";
 import jobsRoutes from "./routes/jobs";
 import pipelineRoutes from "./routes/pipelines";
 import webhookRoutes from "./routes/webhooks";
@@ -16,6 +17,7 @@ app.get("/health", (_req, res) => {
 app.use("/pipelines", pipelineRoutes);
 app.use("/webhooks", webhookRoutes);
 app.use("/jobs", jobsRoutes);
+app.use("/deliveries", deliveriesRoutes);
 
 const PORT = process.env.PORT || 3000;
 

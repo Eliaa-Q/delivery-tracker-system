@@ -22,6 +22,20 @@
       "when": 1773823882819,
       "tag": "0002_panoramic_thunderball",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1773912818987,
+      "tag": "0003_round_jane_foster",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1773916068268,
+      "tag": "0004_sharp_blink",
+      "breakpoints": true
     }
   ]
 }

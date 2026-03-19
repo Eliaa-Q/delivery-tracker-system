@@ -1,4 +1,4 @@
-import { AppError, DeliveryStatus, Job } from "../../../../types";
+import { ActionResult, AppError, DeliveryStatus, Job } from "../../../../types";
 import {
   createDelivery,
   getDeliveryById,
@@ -22,7 +22,7 @@ function getPayload(job: Job): UpdateDeliveryPayload {
   return job.payload as UpdateDeliveryPayload;
 }
 
-export async function updateDeliveryStatus(job: Job) {
+export async function updateDeliveryStatus(job: Job): Promise<ActionResult> {
   const payload = getPayload(job);
 
   const deliveryId = payload.deliveryId ?? payload.delivery_id;
@@ -58,6 +58,7 @@ export async function updateDeliveryStatus(job: Job) {
 
     return {
       action: "updateDeliveryStatus",
+      success: true,
       operation: "created",
       delivery: created,
     };
@@ -71,6 +72,7 @@ export async function updateDeliveryStatus(job: Job) {
 
   return {
     action: "updateDeliveryStatus",
+    success: true,
     operation: "updated",
     delivery: updated,
   };
