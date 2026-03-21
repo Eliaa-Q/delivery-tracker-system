@@ -1,6 +1,5 @@
 import { ActionResult, AppError, DeliveryStatus, Job } from "../../../../types";
 import {
-  createDelivery,
   getDeliveryById,
   updateDeliveryById,
 } from "../db/queries/deliveryQueries";
@@ -41,27 +40,11 @@ export async function updateDeliveryStatus(job: Job): Promise<ActionResult> {
   const existingDelivery = await getDeliveryById(deliveryId);
 
   if (!existingDelivery) {
-    if (status !== "assigned") {
-      throw new AppError(
-        "JOB_PROCESSING_FAILED",
-        `Delivery ${deliveryId} does not exist and cannot be updated unless status is assigned`,
-        400,
-      );
-    }
-
-    const created = await createDelivery({
-      id: deliveryId,
-      driverId,
-      status,
-      eta,
-    });
-
-    return {
-      action: "updateDeliveryStatus",
-      success: true,
-      operation: "created",
-      delivery: created,
-    };
+    throw new AppError(
+      "JOB_PROCESSING_FAILED",
+      `Delivery ${deliveryId} does not exist`,
+      404,
+    );
   }
 
   const updated = await updateDeliveryById(deliveryId, {

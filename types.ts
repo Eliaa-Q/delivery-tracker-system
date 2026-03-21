@@ -35,6 +35,7 @@ export interface Pipeline {
 }
 //Delivery Types
 export type DeliveryStatus =
+  | "new"
   | "assigned"
   | "picked_up"
   | "in_transit"
