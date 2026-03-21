@@ -1,7 +1,32 @@
-import { eq, sql } from "drizzle-orm";
 import { db } from "../db";
-import { deliveries } from "../schema/deliveries";
+import { analytics } from "../schema/analytics";
+import { eq, desc, sql } from "drizzle-orm";
 import { feedback } from "../schema/feedback";
+import { deliveries } from "../schema/deliveries";
+export async function createAnalyticsRecord(
+  data: typeof analytics.$inferInsert,
+) {
+  const result = await db.insert(analytics).values(data).returning();
+  return result[0];
+}
+
+export async function createManyAnalyticsRecords(
+  data: (typeof analytics.$inferInsert)[],
+) {
+  return db.insert(analytics).values(data).returning();
+}
+
+export async function getAllAnalytics() {
+  return db.select().from(analytics).orderBy(desc(analytics.createdAt));
+}
+
+export async function getAnalyticsByDriverId(driverId: string) {
+  return db
+    .select()
+    .from(analytics)
+    .where(eq(analytics.driverId, driverId))
+    .orderBy(desc(analytics.createdAt));
+}
 
 export async function createFeedback(data: typeof feedback.$inferInsert) {
   const result = await db.insert(feedback).values(data).returning();
@@ -9,7 +34,15 @@ export async function createFeedback(data: typeof feedback.$inferInsert) {
 }
 
 export async function getFeedbackByDeliveryId(deliveryId: string) {
-  return db.select().from(feedback).where(eq(feedback.deliveryId, deliveryId));
+  return db
+    .select()
+    .from(feedback)
+    .where(eq(feedback.deliveryId, deliveryId))
+    .orderBy(desc(feedback.createdAt));
+}
+
+export async function getAllFeedback() {
+  return db.select().from(feedback).orderBy(desc(feedback.createdAt));
 }
 
 export async function getDriverFeedbackStats(driverId: string) {
