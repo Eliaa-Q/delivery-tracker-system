@@ -7,7 +7,7 @@ import feedbackRoutes from "./routes/feedbacks";
 import jobsRoutes from "./routes/jobs";
 import pipelineRoutes from "./routes/pipelines";
 import webhookRoutes from "./routes/webhooks";
-
+import subscribersRoutes from "./routes/subscribers";
 dotenv.config();
 
 const app = express();
@@ -24,7 +24,8 @@ app.use("/deliveries", deliveriesRoutes);
 app.use("/drivers", driversRoutes);
 app.use("/analytics", analyticsRoutes);
 app.use("/feedback", feedbackRoutes);
-
+//its route file contains both /pipelines/:id/subscribers and /subscribers/:id
+app.use("/", subscribersRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
