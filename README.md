@@ -125,7 +125,6 @@ A lightweight dashboard built with:
 npm install
 ```
 
----
 
 ### 2. Setup environment
 
@@ -136,7 +135,6 @@ DATABASE_URL=postgres://user:password@localhost:5432/db
 PORT=3000
 ```
 
----
 
 ### 3. Run database migrations
 
@@ -145,7 +143,6 @@ npm run db:generate
 npm run db:migrate
 ```
 
----
 
 ### 4. Start backend
 
@@ -153,7 +150,6 @@ npm run db:migrate
 npm run dev
 ```
 
----
 
 ### 5. Start worker
 
@@ -161,7 +157,6 @@ npm run dev
 npm run worker
 ```
 
----
 
 ### 6. Run frontend dashboard
 
