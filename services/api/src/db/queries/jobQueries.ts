@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, isNull } from "drizzle-orm";
+import { and, asc, desc, eq, isNull, inArray } from "drizzle-orm";
 import { db } from "../db";
 import { jobs } from "../schema/jobs";
 
@@ -91,6 +91,24 @@ export async function failJob(
     })
     .where(eq(jobs.id, id))
     .returning();
+
+  return result[0];
+}
+export async function getActiveJobByTypeAndDeliveryId(
+  jobType: string,
+  deliveryId: string,
+) {
+  const result = await db
+    .select()
+    .from(jobs)
+    .where(
+      and(
+        eq(jobs.jobType, jobType),
+        eq(jobs.deliveryId, deliveryId),
+        inArray(jobs.status, ["pending", "processing"]),
+      ),
+    )
+    .limit(1);
 
   return result[0];
 }

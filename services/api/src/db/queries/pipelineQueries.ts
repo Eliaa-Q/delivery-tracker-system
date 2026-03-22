@@ -39,3 +39,9 @@ export async function deletePipelineById(id: string) {
 
   return result[0];
 }
+export async function getPipelinesByActionType(actionType: string) {
+  return db
+    .select()
+    .from(pipelines)
+    .where(eq(pipelines.actionType, actionType));
+}

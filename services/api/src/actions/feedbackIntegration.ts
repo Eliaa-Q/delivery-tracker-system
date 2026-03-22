@@ -52,31 +52,6 @@ export async function feedbackIntegration(job: Job): Promise<ActionResult> {
     comment,
   });
 
-  if (rating <= 2) {
-    return {
-      action: "feedbackIntegration",
-      success: true,
-      feedbackRecorded: true,
-      deliveryId,
-      rating,
-      comment,
-      feedback: savedFeedback,
-      nextJob: {
-        jobType: "driverDelaySpikeChain",
-        priority: 3,
-        payload: {
-          deliveryId,
-          driverId: delivery.driverId,
-          rating,
-          comment,
-          reason: "Low customer rating received",
-        },
-        deliveryId,
-        maxAttempts: 3,
-      },
-    };
-  }
-
   return {
     action: "feedbackIntegration",
     success: true,
@@ -85,5 +60,16 @@ export async function feedbackIntegration(job: Job): Promise<ActionResult> {
     rating,
     comment,
     feedback: savedFeedback,
+    nextJob: {
+      jobType: "driverPerformanceMetrics",
+      priority: rating <= 2 ? 3 : 2,
+      payload: {
+        deliveryId,
+        driverId: delivery.driverId,
+        reason: "Feedback received; recompute driver metrics",
+      },
+      deliveryId,
+      maxAttempts: 3,
+    },
   };
 }
