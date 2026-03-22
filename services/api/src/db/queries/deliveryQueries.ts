@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "../db";
 import { deliveries } from "../schema/deliveries";
 
@@ -32,4 +32,10 @@ export async function updateDeliveryById(
     .returning();
 
   return result[0];
+}
+export async function getActiveDeliveriesForDelayCheck() {
+  return db
+    .select()
+    .from(deliveries)
+    .where(inArray(deliveries.status, ["assigned", "picked_up", "in_transit"]));
 }

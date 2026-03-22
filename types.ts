@@ -98,6 +98,18 @@ export type ActionResult = {
   [key: string]: unknown;
 };
 
+//Alert Types
+export type AlertType = "delay_alert" | "driver_escalation" | "generic_alert";
+
+export interface Alert {
+  id: string;
+  deliveryId?: string | null;
+  driverId?: string | null;
+  type: AlertType;
+  message: string;
+  sourceJobId?: string | null;
+  createdAt?: Date;
+}
 // Error Types
 export type AppErrorCode =
   | "PIPELINE_NOT_FOUND"
