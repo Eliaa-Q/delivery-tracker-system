@@ -10,12 +10,13 @@ import pipelineRoutes from "./routes/pipelines";
 import receiversRoutes from "./routes/receivers";
 import subscribersRoutes from "./routes/subscribers";
 import webhookRoutes from "./routes/webhooks";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
