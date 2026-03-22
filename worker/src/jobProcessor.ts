@@ -8,6 +8,7 @@ import {
   retryJob,
 } from "../../services/api/src/db/queries/jobQueries";
 import { runAction } from "./actionsRunner";
+import { deliverJobResultToSubscribers } from "./deliverySender";
 
 function hasNextJob(result: ActionResult): result is ActionResult & {
   nextJob: NonNullable<ActionResult["nextJob"]>;
@@ -51,10 +52,16 @@ export async function processNextJob() {
 
     await completeJob(lockedJob.id, actionResult);
 
+    const subscriberResults = await deliverJobResultToSubscribers(
+      lockedJob as Job,
+      actionResult,
+    );
+
     return {
       status: "completed",
       jobId: lockedJob.id,
       result: actionResult,
+      subscriberResults,
     };
   } catch (error) {
     const nextAttemptCount = (lockedJob.attemptCount ?? 0) + 1;

@@ -36,6 +36,13 @@
       "when": 1773916068268,
       "tag": "0004_sharp_blink",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1774172886509,
+      "tag": "0005_short_squadron_supreme",
+      "breakpoints": true
     }
   ]
 }

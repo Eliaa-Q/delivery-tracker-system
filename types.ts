@@ -33,6 +33,30 @@ export interface Pipeline {
   actionConfig: Record<string, unknown> | null;
   createdAt?: Date;
 }
+
+//Subscribers Types
+export type DeliveryAttemptStatus = "pending" | "success" | "failed";
+
+export interface Subscriber {
+  id: string;
+  pipelineId: string;
+  name: string;
+  targetUrl: string;
+  createdAt?: Date;
+}
+
+export interface DeliveryAttempt {
+  id: string;
+  jobId: string;
+  subscriberId: string;
+  status: DeliveryAttemptStatus;
+  attemptCount: number;
+  responseStatus?: number | null;
+  responseBody?: string | null;
+  lastAttemptAt?: Date | null;
+  createdAt?: Date;
+}
+
 //Delivery Types
 export type DeliveryStatus =
   | "new"
