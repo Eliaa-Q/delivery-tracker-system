@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thundery - Delivery System Monitor</title>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              surface: "#f9f9ff",
+              "surface-2": "#ededf5",
+              "surface-3": "#ffffff",
+              "surface-4": "#e7e7ef",
+              primary: "#32414f",
+              "primary-2": "#495867",
+              secondary: "#446085",
+              "secondary-2": "#b7d4fe",
+              tertiary: "#2b4252",
+              outline: "#74777c",
+              "outline-soft": "rgba(116, 119, 124, 0.15)",
+              error: "#ba1a1a",
+              "error-soft": "#ffdad6",
+              success: "#355f39",
+              warning: "#c58b00",
+            },
+            fontFamily: {
+              headline: ["Manrope", "sans-serif"],
+              body: ["Inter", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 8px 24px rgba(25, 27, 33, 0.06)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="bg-surface text-primary font-body min-h-screen">
+    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md shadow-sm">
+      <div
+        class="max-w-[1440px] mx-auto px-8 h-20 flex items-center justify-between gap-6"
+      >
+        <div class="flex items-center gap-10 flex-1">
+          <div class="shrink-0">
+            <h1
+              class="text-3xl font-black font-headline tracking-tight text-slate-900"
+            >
+              Thundery
+            </h1>
+            <p
+              class="text-[10px] uppercase tracking-[0.22em] text-slate-500 font-bold"
+            >
+              Delivery System Monitor
+            </p>
+          </div>
+
+          <div class="relative w-full max-w-xl">
+            <span
+              class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+            >
+              🔍
+            </span>
+            <input
+              id="globalSearch"
+              type="text"
+              placeholder="Search tracking ID, drivers..."
+              class="w-full rounded-2xl border-0 bg-[#e7e7ef] pl-11 pr-4 py-3 text-sm focus:ring-2 focus:ring-secondary/20"
+            />
+          </div>
+        </div>
+
+        <div class="text-xs text-outline font-semibold">Live dashboard</div>
+      </div>
+    </header>
+
+    <main class="max-w-[1440px] mx-auto px-8 py-8">
+      <div class="grid grid-cols-12 gap-8">
+        <!-- LEFT -->
+        <section class="col-span-12 xl:col-span-8 space-y-8">
+          <div
+            class="flex flex-col md:flex-row md:items-end justify-between gap-4"
+          >
+            <div>
+              <h2
+                class="text-5xl font-headline font-extrabold tracking-tight leading-tight"
+              >
+                Thundery - Delivery System Monitor
+              </h2>
+              <div class="mt-3 flex items-center gap-2 text-secondary text-xl">
+                <span
+                  class="w-2 h-2 rounded-full bg-secondary animate-pulse"
+                ></span>
+                <span>Dashboard</span>
+              </div>
+            </div>
+
+            <div></div>
+          </div>
+
+          <!-- top cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-surface-3 rounded-2xl p-6 shadow-soft">
+              <div class="flex items-center justify-between mb-6">
+                <h3 class="font-headline font-bold text-xl">Delivery Volume</h3>
+                <span
+                  class="text-xs px-3 py-1 rounded-lg bg-surface-4 text-outline font-semibold"
+                >
+                  Last 7 Days
+                </span>
+              </div>
+
+              <div
+                id="deliveryVolumeChart"
+                class="h-52 flex items-end gap-3"
+              ></div>
+
+              <div
+                id="deliveryVolumeLabels"
+                class="mt-4 grid grid-cols-7 text-[11px] uppercase tracking-wider text-outline font-bold"
+              ></div>
+            </div>
+
+            <div
+              class="bg-gradient-to-br from-primary to-primary-2 rounded-2xl p-6 shadow-soft text-white relative overflow-hidden"
+            >
+              <div class="relative z-10">
+                <h3 class="font-headline font-bold text-2xl mb-5">
+                  Operational Efficiency
+                </h3>
+                <div class="flex items-center gap-3 flex-wrap">
+                  <span
+                    id="efficiencyValue"
+                    class="text-5xl font-headline font-extrabold"
+                  >
+                    0%
+                  </span>
+                  <span class="bg-white/12 text-sm px-3 py-1 rounded-lg">
+                    live from jobs
+                  </span>
+                </div>
+                <p class="mt-5 text-sm text-white/80 max-w-md leading-6">
+                  Live ratio based on completed jobs against total jobs. This
+                  gives a quick signal of system health and pipeline throughput.
+                </p>
+              </div>
+              <div
+                class="absolute -right-10 -bottom-10 w-48 h-48 rounded-full bg-white/10 blur-3xl"
+              ></div>
+            </div>
+          </div>
+
+          <!-- active drivers -->
+          <section>
+            <div class="flex items-center justify-between mb-4">
+              <h3
+                class="font-headline font-bold text-2xl flex items-center gap-2"
+              >
+                <span>👥</span>
+                <span>Active Drivers</span>
+              </h3>
+            </div>
+
+            <div
+              id="driversGrid"
+              class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
+            ></div>
+          </section>
+
+          <!-- alerts + logs -->
+          <section class="bg-surface-3 rounded-2xl shadow-soft overflow-hidden">
+            <div
+              class="px-6 py-4 flex items-center justify-between bg-[#f2f2f8]"
+            >
+              <h3
+                class="font-headline font-bold text-2xl flex items-center gap-2"
+              >
+                <span class="text-error">🔔</span>
+                <span>Logs & Alerts</span>
+              </h3>
+              <input
+                id="alertSearch"
+                type="text"
+                placeholder="Filter logs or alerts..."
+                class="w-56 rounded-xl border-0 bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-secondary/20"
+              />
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead
+                  class="text-left text-[11px] uppercase tracking-[0.18em] text-outline bg-[#f7f7fb]"
+                >
+                  <tr>
+                    <th class="px-6 py-4">Time</th>
+                    <th class="px-6 py-4">Type</th>
+                    <th class="px-6 py-4">Source</th>
+                    <th class="px-6 py-4">Details</th>
+                  </tr>
+                </thead>
+                <tbody id="alertsTableBody"></tbody>
+              </table>
+            </div>
+
+            <div class="px-6 py-4 bg-white border-t border-slate-100">
+              <button
+                id="toggleAlertsBtn"
+                class="text-sm font-semibold text-secondary hover:underline"
+              >
+                Show All
+              </button>
+            </div>
+          </section>
+
+          <!-- deliveries -->
+          <section class="bg-surface-3 rounded-2xl shadow-soft overflow-hidden">
+            <div
+              class="px-6 py-4 flex items-center justify-between bg-[#f2f2f8]"
+            >
+              <h3 class="font-headline font-bold text-2xl">
+                🚖 All Deliveries
+              </h3>
+
+              <input
+                id="deliverySearch"
+                type="text"
+                placeholder="Tracking ID..."
+                class="w-52 rounded-xl border-0 bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-secondary/20"
+              />
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead
+                  class="text-left text-[11px] uppercase tracking-[0.18em] text-outline bg-[#f7f7fb]"
+                >
+                  <tr>
+                    <th class="px-6 py-4">Tracking ID</th>
+                    <th class="px-6 py-4">Driver</th>
+                    <th class="px-6 py-4">Status</th>
+                    <th class="px-6 py-4">ETA</th>
+                  </tr>
+                </thead>
+                <tbody id="deliveriesTableBody"></tbody>
+              </table>
+            </div>
+
+            <div class="px-6 py-4 bg-white border-t border-slate-100">
+              <button
+                id="toggleDeliveriesBtn"
+                class="text-sm font-semibold text-secondary hover:underline"
+              >
+                Show All
+              </button>
+            </div>
+          </section>
+        </section>
+
+        <!-- RIGHT -->
+        <aside class="col-span-12 xl:col-span-4">
+          <section class="bg-surface-2 rounded-[28px] p-6 h-full">
+            <div class="flex items-center justify-between mb-8">
+              <h3 class="font-headline font-extrabold text-4xl tracking-tight">
+                Metrics
+              </h3>
+              <span
+                class="text-[10px] bg-white px-2 py-1 rounded-md font-bold tracking-wider text-outline"
+              >
+                LIVE FEED
+              </span>
+            </div>
+
+            <div class="space-y-4 mb-8">
+              <div class="metric-card border-l-[4px] border-secondary">
+                <div>
+                  <p class="metric-label">Running Jobs</p>
+                  <p id="runningJobsValue" class="metric-value">0</p>
+                </div>
+                <div class="metric-icon bg-secondary-2 text-secondary">🏃</div>
+              </div>
+
+              <div class="metric-card border-l-[4px] border-warning">
+                <div>
+                  <p class="metric-label">Pending Jobs</p>
+                  <p id="pendingJobsValue" class="metric-value">0</p>
+                </div>
+                <div class="metric-icon bg-[#fff1c7] text-warning">⏳</div>
+              </div>
+
+              <div class="metric-card border-l-[4px] border-primary">
+                <div>
+                  <p class="metric-label">Completed Jobs</p>
+                  <p id="completedJobsValue" class="metric-value">0</p>
+                </div>
+                <div class="metric-icon bg-[#d9e5f0] text-primary">✔</div>
+              </div>
+            </div>
+
+            <!-- status distribution -->
+            <div class="bg-surface-3 rounded-2xl p-6 shadow-soft mb-8">
+              <h4 class="text-lg font-bold mb-5">Status Distribution</h4>
+              <div class="relative w-52 h-52 mx-auto mb-8">
+                <div id="statusDonut" class="w-full h-full rounded-full"></div>
+                <div
+                  class="absolute inset-9 bg-surface-3 rounded-full flex flex-col items-center justify-center"
+                >
+                  <span
+                    id="statusDonutTotal"
+                    class="text-4xl font-headline font-extrabold text-primary"
+                    >0</span
+                  >
+                  <span
+                    class="text-[10px] uppercase tracking-[0.18em] text-outline font-bold"
+                    >Total</span
+                  >
+                </div>
+              </div>
+              <div id="statusLegend" class="space-y-3"></div>
+            </div>
+
+            <!-- running jobs by action type -->
+            <div class="bg-surface-3 rounded-2xl p-6 shadow-soft">
+              <h4 class="text-lg font-bold mb-5">Active Jobs by Action</h4>
+              <div class="relative w-52 h-52 mx-auto mb-8">
+                <div id="actionDonut" class="w-full h-full rounded-full"></div>
+                <div
+                  class="absolute inset-9 bg-surface-3 rounded-full flex flex-col items-center justify-center"
+                >
+                  <span
+                    id="actionDonutTotal"
+                    class="text-3xl font-headline font-extrabold text-primary"
+                    >0</span
+                  >
+                  <span
+                    class="text-[10px] uppercase tracking-[0.18em] text-outline font-bold"
+                    >Active</span
+                  >
+                </div>
+              </div>
+              <div id="actionLegend" class="space-y-3"></div>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
