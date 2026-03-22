@@ -1,6 +1,3 @@
-Here’s a balanced version — not too long, not too short, clearer on endpoints, actions, and your delivery monitor:
-
----
 
 # ⚡ Webhook-Driven Task Processing Pipeline
 
@@ -198,8 +195,6 @@ npm test
 * Strong **error handling & retry logic**
 * Includes a **live dashboard (Delivery Monitor)**
 * Simulates real-world logistics & delivery systems
-
----
 
 
 
