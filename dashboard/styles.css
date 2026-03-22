@@ -1,0 +1,166 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+.metric-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(25, 27, 33, 0.06);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metric-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #74777c;
+  margin-bottom: 0.35rem;
+}
+
+.metric-value {
+  font-family: "Manrope", sans-serif;
+  font-size: 2.2rem;
+  line-height: 1;
+  font-weight: 800;
+  color: #191b21;
+}
+
+.metric-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+}
+
+.driver-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(25, 27, 33, 0.06);
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.driver-card--warning {
+  background: rgba(255, 218, 214, 0.38);
+}
+
+.driver-avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #ededf5;
+  color: #74777c;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.driver-avatar--warning {
+  background: rgba(186, 26, 26, 0.1);
+  color: #ba1a1a;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.badge--standby {
+  background: #ededf5;
+  color: #74777c;
+}
+
+.badge--route {
+  background: #b7d4fe;
+  color: #3f5b80;
+}
+
+.badge--review {
+  background: #ffdad6;
+  color: #93000a;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  border-radius: 0.4rem;
+  padding: 0.3rem 0.5rem;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.status-new {
+  background: #ededf5;
+  color: #32414f;
+}
+
+.status-assigned,
+.status-picked_up,
+.status-in_transit {
+  background: #b7d4fe;
+  color: #3f5b80;
+}
+
+.status-delivered {
+  background: #d4e4f6;
+  color: #0d1d2a;
+}
+
+.status-delayed,
+.status-exception {
+  background: #ffdad6;
+  color: #93000a;
+}
+
+.status-canceled {
+  background: #ececec;
+  color: #5b5b5b;
+}
+
+.table-row-soft {
+  border-top: 1px solid rgba(116, 119, 124, 0.08);
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.82rem;
+}
+
+.legend-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.legend-dot {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 0.2rem;
+  flex-shrink: 0;
+}
