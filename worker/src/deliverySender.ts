@@ -5,6 +5,7 @@ import {
   markDeliveryAttemptSuccess,
 } from "../../services/api/src/db/queries/deliveryAttemptQueries";
 import { getSubscribersByPipelineId } from "../../services/api/src/db/queries/subscriberQueries";
+import { createAlert } from "../../services/api/src/db/queries/alertQueries";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -94,6 +95,13 @@ export async function deliverJobResultToSubscribers(
         lastBody,
         retryDelays.length,
       );
+      await createAlert({
+        deliveryId: job.deliveryId ?? null,
+        driverId: null,
+        type: "subscriber_failure",
+        message: `Subscriber delivery failed for subscriber ${subscriber.id} after retries`,
+        sourceJobId: job.id,
+      });
 
       results.push({
         subscriberId: subscriber.id,

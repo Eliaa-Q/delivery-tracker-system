@@ -20,6 +20,9 @@ const state = {
   deliverySearch: "",
   showAllAlerts: false,
   showAllDeliveries: false,
+  attempts: [],
+  attemptSearch: "",
+  showAllAttempts: false,
 };
 
 async function fetchJson(path) {
@@ -38,6 +41,15 @@ function formatShortDate(value) {
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+  });
+}
+function formatDate(value) {
+  if (!value) return "—";
+  const date = new Date(value);
+  return date.toLocaleDateString([], {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
   });
 }
 
@@ -234,18 +246,19 @@ function renderAlerts(alerts) {
           : "System";
 
       return `
-        <tr class="table-row-soft hover:bg-[#f7f7fb] transition-colors">
-          <td class="px-6 py-4 font-medium whitespace-nowrap">${formatTime(alert.createdAt)}</td>
-          <td class="px-6 py-4">
-            <span class="inline-flex items-center gap-2 font-bold" style="color:${color}">
-              <span class="w-2 h-2 rounded-full" style="background:${color}"></span>
-              ${label}
-            </span>
-          </td>
-          <td class="px-6 py-4 text-slate-500">${source}</td>
-          <td class="px-6 py-4 text-slate-600">${alert.message}</td>
-        </tr>
-      `;
+  <tr class="table-row-soft hover:bg-[#f7f7fb] transition-colors">
+    <td class="px-6 py-4 font-medium whitespace-nowrap">${formatDate(alert.createdAt)}</td>
+    <td class="px-6 py-4 font-medium whitespace-nowrap">${formatTime(alert.createdAt)}</td>
+    <td class="px-6 py-4">
+      <span class="inline-flex items-center gap-2 font-bold" style="color:${color}">
+        <span class="w-2 h-2 rounded-full" style="background:${color}"></span>
+        ${label}
+      </span>
+    </td>
+    <td class="px-6 py-4 text-slate-500">${source}</td>
+    <td class="px-6 py-4 text-slate-600">${alert.message}</td>
+  </tr>
+`;
     })
     .join("");
 
@@ -408,6 +421,7 @@ function renderDashboard() {
   renderAlerts(state.alerts);
   renderDeliveries(state.deliveries, state.drivers);
   renderMetrics(state.jobs, state.deliveries);
+  renderAttempts(state.attempts);
 }
 
 function setupInteractions() {
@@ -416,6 +430,8 @@ function setupInteractions() {
   const deliverySearch = document.getElementById("deliverySearch");
   const toggleAlertsBtn = document.getElementById("toggleAlertsBtn");
   const toggleDeliveriesBtn = document.getElementById("toggleDeliveriesBtn");
+  const attemptSearch = document.getElementById("attemptSearch");
+  const toggleAttemptsBtn = document.getElementById("toggleAttemptsBtn");
 
   if (globalSearch) {
     globalSearch.addEventListener("input", (event) => {
@@ -451,28 +467,113 @@ function setupInteractions() {
       renderDashboard();
     });
   }
+  if (attemptSearch) {
+    attemptSearch.addEventListener("input", (event) => {
+      state.attemptSearch = event.target.value;
+      renderDashboard();
+    });
+  }
+
+  if (toggleAttemptsBtn) {
+    toggleAttemptsBtn.addEventListener("click", () => {
+      state.showAllAttempts = !state.showAllAttempts;
+      renderDashboard();
+    });
+  }
+}
+function renderAttempts(attempts) {
+  const tbody = document.getElementById("attemptsTableBody");
+  const toggleBtn = document.getElementById("toggleAttemptsBtn");
+
+  const globalQuery = state.globalSearch.trim().toLowerCase();
+  const localQuery = state.attemptSearch.trim().toLowerCase();
+
+  const filteredAttempts = [...attempts]
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt || 0).getTime() -
+        new Date(a.createdAt || 0).getTime(),
+    )
+    .filter((attempt) => {
+      const searchable = [
+        attempt.id,
+        attempt.jobId,
+        attempt.subscriberId,
+        attempt.status,
+        String(attempt.attemptCount ?? ""),
+        String(attempt.responseStatus ?? ""),
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      const passesGlobal = !globalQuery || searchable.includes(globalQuery);
+      const passesLocal = !localQuery || searchable.includes(localQuery);
+
+      return passesGlobal && passesLocal;
+    });
+
+  const visibleAttempts = state.showAllAttempts
+    ? filteredAttempts
+    : filteredAttempts.slice(0, 10);
+
+  tbody.innerHTML = visibleAttempts
+    .map((attempt) => {
+      const statusColor =
+        attempt.status === "success"
+          ? "#355f39"
+          : attempt.status === "failed"
+            ? "#ba1a1a"
+            : "#446085";
+
+      return `
+        <tr class="table-row-soft hover:bg-[#f7f7fb] transition-colors">
+          <td class="px-4 py-4 font-medium text-slate-700">${attempt.jobId.slice(0, 8)}...</td>
+          <td class="px-4 py-4 text-slate-500">${attempt.subscriberId.slice(0, 8)}...</td>
+          <td class="px-4 py-4">
+            <span class="font-bold" style="color:${statusColor}">
+              ${attempt.status}
+            </span>
+          </td>
+          <td class="px-4 py-4 text-slate-600">${attempt.attemptCount ?? 0}</td>
+          <td class="px-4 py-4 text-slate-600">${attempt.responseStatus ?? "—"}</td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  if (toggleBtn) {
+    if (filteredAttempts.length <= 10) {
+      toggleBtn.style.display = "none";
+    } else {
+      toggleBtn.style.display = "inline-block";
+      toggleBtn.textContent = state.showAllAttempts ? "Show Less" : "Show All";
+    }
+  }
 }
 
 async function loadDashboard() {
   try {
-    const [deliveries, drivers, alerts, jobs] = await Promise.all([
+    const [deliveries, drivers, alerts, jobs, attempts] = await Promise.all([
       fetchJson("/deliveries"),
       fetchJson("/drivers"),
       fetchJson("/alerts"),
       fetchJson("/jobs"),
+      fetchJson("/delivery-attempts"),
     ]);
 
     state.deliveries = deliveries;
     state.drivers = drivers;
     state.alerts = alerts;
     state.jobs = jobs;
+    state.attempts = attempts;
 
     renderDashboard();
   } catch (error) {
-    console.error(error);
+    console.error("Dashboard load failed:", error);
   }
 }
 
+// Initialization
 setupInteractions();
 loadDashboard();
 setInterval(loadDashboard, 15000);

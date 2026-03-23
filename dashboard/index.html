@@ -203,6 +203,8 @@
                   class="text-left text-[11px] uppercase tracking-[0.18em] text-outline bg-[#f7f7fb]"
                 >
                   <tr>
+                    <th class="px-6 py-4">Date</th>
+
                     <th class="px-6 py-4">Time</th>
                     <th class="px-6 py-4">Type</th>
                     <th class="px-6 py-4">Source</th>
@@ -349,6 +351,47 @@
                 </div>
               </div>
               <div id="actionLegend" class="space-y-3"></div>
+            </div>
+            <div
+              class="bg-surface-3 rounded-2xl p-0 shadow-soft overflow-hidden mt-8"
+            >
+              <div
+                class="px-6 py-4 flex items-center justify-between bg-[#f2f2f8]"
+              >
+                <h4 class="text-lg font-bold">Delivery Attempts</h4>
+                <input
+                  id="attemptSearch"
+                  type="text"
+                  placeholder="Search attempts..."
+                  class="w-48 rounded-xl border-0 bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-secondary/20"
+                />
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead
+                    class="text-left text-[11px] uppercase tracking-[0.18em] text-outline bg-[#f7f7fb]"
+                  >
+                    <tr>
+                      <th class="px-4 py-4">Job ID</th>
+                      <th class="px-4 py-4">Subscriber ID</th>
+                      <th class="px-4 py-4">Status</th>
+                      <th class="px-4 py-4">Attempts</th>
+                      <th class="px-4 py-4">Response</th>
+                    </tr>
+                  </thead>
+                  <tbody id="attemptsTableBody"></tbody>
+                </table>
+              </div>
+
+              <div class="px-6 py-4 bg-white border-t border-slate-100">
+                <button
+                  id="toggleAttemptsBtn"
+                  class="text-sm font-semibold text-secondary hover:underline"
+                >
+                  Show All
+                </button>
+              </div>
             </div>
           </section>
         </aside>

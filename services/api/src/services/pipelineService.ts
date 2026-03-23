@@ -1,25 +1,15 @@
+import { AppError } from "../../../../types";
 import {
   createPipeline,
   deletePipelineById,
   getAllPipelines,
   getPipelineById,
+  updatePipelineById,
 } from "../db/queries/pipelineQueries";
-import { PipelineAction } from "../../../../types";
 
-type CreatePipelineInput = {
-  name: string;
-  sourcePath: string;
-  actionType: PipelineAction;
-  actionConfig?: Record<string, unknown> | null;
-};
-
-export async function createPipelineService(input: CreatePipelineInput) {
-  return createPipeline({
-    name: input.name,
-    sourcePath: input.sourcePath,
-    actionType: input.actionType,
-    actionConfig: input.actionConfig ?? null,
-  });
+// Added ': any' to the input parameter
+export async function createPipelineService(input: any) {
+  return createPipeline(input);
 }
 
 export async function getAllPipelinesService() {
@@ -27,9 +17,32 @@ export async function getAllPipelinesService() {
 }
 
 export async function getPipelineByIdService(id: string) {
-  return getPipelineById(id);
+  const pipeline = await getPipelineById(id);
+
+  if (!pipeline) {
+    throw new AppError("PIPELINE_NOT_FOUND", "Pipeline not found", 404);
+  }
+
+  return pipeline;
+}
+
+// Added ': any' to the input parameter here as well
+export async function updatePipelineByIdService(id: string, input: any) {
+  const existing = await getPipelineById(id);
+
+  if (!existing) {
+    throw new AppError("PIPELINE_NOT_FOUND", "Pipeline not found", 404);
+  }
+
+  return updatePipelineById(id, input);
 }
 
 export async function deletePipelineByIdService(id: string) {
+  const existing = await getPipelineById(id);
+
+  if (!existing) {
+    throw new AppError("PIPELINE_NOT_FOUND", "Pipeline not found", 404);
+  }
+
   return deletePipelineById(id);
 }
