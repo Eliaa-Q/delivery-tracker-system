@@ -1,6 +1,7 @@
 import { AppError, PipelineAction } from "../../../../types";
 import { createJob, getAllJobs, getJobById } from "../db/queries/jobQueries";
 import { getPipelineBySourcePath } from "../db/queries/pipelineQueries";
+import { getDeliveryAttemptsByJobId } from "../db/queries/deliveryAttemptQueries";
 
 type WebhookPayload = Record<string, unknown>;
 
@@ -63,4 +64,13 @@ export async function getJobByIdService(id: string) {
   }
 
   return job;
+}
+export async function getJobDeliveryAttemptsService(jobId: string) {
+  const job = await getJobById(jobId);
+
+  if (!job) {
+    throw new AppError("JOB_NOT_FOUND", "Job not found", 404);
+  }
+
+  return getDeliveryAttemptsByJobId(jobId);
 }

@@ -58,3 +58,20 @@ export async function markDeliveryAttemptFailed(
 
   return result[0];
 }
+
+export async function getAllDeliveryAttempts() {
+  return db
+    .select()
+    .from(deliveryAttempts)
+    .orderBy(desc(deliveryAttempts.createdAt));
+}
+
+export async function getDeliveryAttemptById(id: string) {
+  const result = await db
+    .select()
+    .from(deliveryAttempts)
+    .where(eq(deliveryAttempts.id, id))
+    .limit(1);
+
+  return result[0];
+}
