@@ -27,21 +27,28 @@ router.post("/receivers/alerts", async (req, res) => {
     }
 
     let type = "generic_alert";
-    let message = "Alert received";
+    let message = "Log received";
 
     if (result?.action === "delayAlertChain") {
       type = "delay_alert";
       message =
         result?.message ??
-        `Delay alert received for delivery ${deliveryId ?? "unknown"}`;
-    }
-
-    if (result?.action === "driverDelaySpikeChain") {
+        `Delay alert recorded for delivery ${deliveryId ?? "unknown"}`;
+    } else if (result?.action === "driverDelaySpikeChain") {
       type = "driver_escalation";
       message =
         result?.reason ??
         result?.message ??
         `Driver escalation received for driver ${driverId ?? "unknown"}`;
+    } else if (result?.action === "feedbackIntegration") {
+      type = "generic_alert";
+      message = `Feedback processed for delivery ${deliveryId ?? "unknown"}`;
+    } else if (result?.action === "driverPerformanceMetrics") {
+      type = "generic_alert";
+      message = `Driver metrics recalculated for driver ${driverId ?? "unknown"}`;
+    } else {
+      type = "generic_alert";
+      message = `Log received`;
     }
 
     const alert = await createAlert({
