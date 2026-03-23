@@ -145,33 +145,20 @@ npm run db:migrate
 ```
 
 
-### 4. Start backend
-
-```bash
-npm run dev
-```
-
-
-### 5. Start worker
-
-```bash
-npm run worker
-```
-
-
-### 6. Run frontend dashboard
-
-```bash
-npx serve dashboard
-```
-
----
-
-## 🐳 Docker
+### 4. Start backend & 🐳 Docker
 
 ```bash
 docker compose up --build
 ```
+
+
+### 5. Run frontend dashboard
+
+```bash
+npx serve dashboard -l <PORT_OTHER_THAN_USED_ONES> dashboard
+```
+
+
 
 ---
 
