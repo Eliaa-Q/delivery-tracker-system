@@ -45,3 +45,15 @@ export async function getPipelinesByActionType(actionType: string) {
     .from(pipelines)
     .where(eq(pipelines.actionType, actionType));
 }
+export async function updatePipelineById(
+  id: string,
+  data: Partial<typeof pipelines.$inferInsert>,
+) {
+  const result = await db
+    .update(pipelines)
+    .set(data)
+    .where(eq(pipelines.id, id))
+    .returning();
+
+  return result[0];
+}
