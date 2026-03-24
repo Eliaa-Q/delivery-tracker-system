@@ -115,6 +115,8 @@ A lightweight dashboard built with:
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/94b45439-6074-4a7f-8509-df625a1f9a20" />
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8521cf8e-5ccb-4ee9-bf97-b68ca214bafe" />
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f6e810b8-f704-44db-bac5-d1f03043ad43" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/332cdda1-cc6e-4b00-bdd8-09dad6c68fe8" />
+
 
 
 ---
