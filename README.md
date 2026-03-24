@@ -112,9 +112,9 @@ A lightweight dashboard built with:
 * Deliveries table
 
 ### 🎥 Demonstration
-<img width="1913" height="967" alt="Screenshot (262)" src="https://github.com/user-attachments/assets/d081ec6b-a2c7-43fd-8fa0-78abcb789899" />
-<img width="1920" height="955" alt="Screenshot (263)" src="https://github.com/user-attachments/assets/dfe62e43-bbd3-4c58-86fb-b2b1bf78cdfb" />
-<img width="1920" height="913" alt="Screenshot (264)" src="https://github.com/user-attachments/assets/d9f1b8af-7a88-4f77-860b-25b235c8839d" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1ed188c0-16e3-4a81-99aa-e349fc6b2dfc" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4c9440c7-7c21-4d99-a2b6-6a188115d88a" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/4f819739-a9fb-48cc-a82a-c39c2e14cc39" />
 
 ---
 
