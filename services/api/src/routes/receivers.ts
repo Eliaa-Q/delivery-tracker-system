@@ -7,19 +7,19 @@ const router = Router();
 
 router.post("/receivers/alerts", async (req, res) => {
   try {
-    const body = req.body;
+    const body = req.body ?? {};
+    const result = body.result ?? {};
+    const jobId = body.jobId ?? null;
 
-    const result = body?.result ?? {};
-    const jobId = body?.jobId ?? null;
-
-    const payload = result?.payload ?? {};
-    const delivery = result?.delivery ?? null;
-    const driver = result?.driver ?? null;
+    const action = result.action ?? null;
+    const delivery = result.delivery ?? null;
+    const driver = result.driver ?? null;
+    const event = result.event ?? null;
 
     const deliveryId =
-      payload?.deliveryId ?? result?.deliveryId ?? delivery?.id ?? null;
+      result.deliveryId ?? delivery?.id ?? event?.deliveryId ?? null;
 
-    let driverId = payload?.driverId ?? result?.driverId ?? driver?.id ?? null;
+    let driverId = result.driverId ?? driver?.id ?? delivery?.driverId ?? null;
 
     if (!driverId && deliveryId) {
       const existingDelivery = await getDeliveryById(deliveryId);
@@ -29,26 +29,23 @@ router.post("/receivers/alerts", async (req, res) => {
     let type = "generic_alert";
     let message = "Log received";
 
-    if (result?.action === "delayAlertChain") {
+    if (action === "delayAlertChain") {
       type = "delay_alert";
       message =
-        result?.message ??
+        result.message ??
         `Delay alert recorded for delivery ${deliveryId ?? "unknown"}`;
-    } else if (result?.action === "driverDelaySpikeChain") {
+    } else if (action === "driverDelaySpikeChain") {
       type = "driver_escalation";
       message =
-        result?.reason ??
-        result?.message ??
-        `Driver escalation received for driver ${driverId ?? "unknown"}`;
-    } else if (result?.action === "feedbackIntegration") {
+        result.reason ??
+        result.message ??
+        "Driver average rating dropped below 3.5";
+    } else if (action === "feedbackIntegration") {
       type = "generic_alert";
       message = `Feedback processed for delivery ${deliveryId ?? "unknown"}`;
-    } else if (result?.action === "driverPerformanceMetrics") {
+    } else if (action === "driverPerformanceMetrics") {
       type = "generic_alert";
       message = `Driver metrics recalculated for driver ${driverId ?? "unknown"}`;
-    } else {
-      type = "generic_alert";
-      message = `Log received`;
     }
 
     const alert = await createAlert({
@@ -74,19 +71,15 @@ router.post("/receivers/alerts", async (req, res) => {
 
 router.post("/receivers/analytics", async (req, res) => {
   try {
-    const body = req.body;
-    const result = body?.result ?? {};
-    const payload = result?.payload ?? {};
-    const driver = result?.driver ?? null;
+    const body = req.body ?? {};
+    const result = body.result ?? {};
+    const driver = result.driver ?? null;
 
-    const driverId =
-      result?.driverId ?? payload?.driverId ?? driver?.id ?? null;
+    const driverId = result.driverId ?? driver?.id ?? null;
 
-    const averageRating =
-      result?.averageRating ?? payload?.averageRating ?? null;
+    const averageRating = result.averageRating ?? null;
 
-    const feedbackCount =
-      result?.feedbackCount ?? payload?.feedbackCount ?? null;
+    const feedbackCount = result.feedbackCount ?? null;
 
     const createdRecords = [];
 
