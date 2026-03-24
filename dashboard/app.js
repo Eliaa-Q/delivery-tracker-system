@@ -201,28 +201,27 @@ function renderAlerts(alerts) {
 
   const globalQuery = state.globalSearch.trim().toLowerCase();
   const localQuery = state.alertSearch.trim().toLowerCase();
+  // 1. Sort FIRST: Newest (B) to Oldest (A)
+  const sortedAlerts = [...alerts].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
 
-  const filteredAlerts = [...alerts]
-    .sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    )
-    .filter((alert) => {
-      const source = alert.deliveryId || alert.driverId || "";
-      const searchable = [
-        alert.type,
-        alert.message,
-        source,
-        alert.sourceJobId || "",
-      ]
-        .join(" ")
-        .toLowerCase();
+  // 2. Filter SECOND
+  const filteredAlerts = sortedAlerts.filter((alert) => {
+    const source = alert.deliveryId || alert.driverId || "";
+    const searchable = [
+      alert.type,
+      alert.message,
+      source,
+      alert.sourceJobId || "",
+    ]
+      .join(" ")
+      .toLowerCase();
+    const passesGlobal = !globalQuery || searchable.includes(globalQuery);
+    const passesLocal = !localQuery || searchable.includes(localQuery);
 
-      const passesGlobal = !globalQuery || searchable.includes(globalQuery);
-      const passesLocal = !localQuery || searchable.includes(localQuery);
-
-      return passesGlobal && passesLocal;
-    });
+    return passesGlobal && passesLocal;
+  });
 
   const visibleAlerts = state.showAllAlerts
     ? filteredAlerts

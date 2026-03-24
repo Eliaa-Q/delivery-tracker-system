@@ -20,7 +20,6 @@ export async function deliverJobResultToSubscribers(
   if (!subscribers.length) {
     return [];
   }
-
   const results = [];
 
   for (const subscriber of subscribers) {
